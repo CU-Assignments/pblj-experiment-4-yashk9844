@@ -1,0 +1,75 @@
+import java.util.*;
+
+class Card {
+    private String symbol;
+    private String name;
+
+    public Card(String symbol, String name) {
+        this.symbol = symbol;
+        this.name = name;
+    }
+
+    public String getSymbol() {
+        return symbol;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public String toString() {
+        return name + " (" + symbol + ")";
+    }
+}
+
+public class CardCollector {
+    private Map<String, List<Card>> cardMap;
+
+    public CardCollector() {
+        cardMap = new HashMap<>();
+    }
+
+    public void addCard(Card card) {
+        cardMap.computeIfAbsent(card.getSymbol(), k -> new ArrayList<>()).add(card);
+    }
+
+    public void displayCardsBySymbol(String symbol) {
+        List<Card> cards = cardMap.get(symbol);
+        if (cards != null && !cards.isEmpty()) {
+            System.out.println("Cards with symbol '" + symbol + "':");
+            for (Card card : cards) {
+                System.out.println(card);
+            }
+        } else {
+            System.out.println("No cards found with symbol '" + symbol + "'.");
+        }
+    }
+
+    public void displayAllSymbols() {
+        List<String> symbols = new ArrayList<>(cardMap.keySet());
+        Collections.sort(symbols);
+        System.out.println("Distinct symbols in alphabetical order:");
+        for (String symbol : symbols) {
+            System.out.println(symbol);
+        }
+    }
+
+    public static void main(String[] args) {
+        CardCollector collector = new CardCollector();
+        
+        collector.addCard(new Card("Hearts", "Ace of Hearts"));
+        collector.addCard(new Card("Hearts", "King of Hearts"));
+        collector.addCard(new Card("Diamonds", "Queen of Diamonds"));
+        collector.addCard(new Card("Clubs", "Jack of Clubs"));
+        collector.addCard(new Card("Spades", "10 of Spades"));
+
+        collector.displayAllSymbols();
+
+        collector.displayCardsBySymbol("Hearts");
+        collector.displayCardsBySymbol("Diamonds");
+        collector.displayCardsBySymbol("Clubs");
+        collector.displayCardsBySymbol("Spades");
+        collector.displayCardsBySymbol("Jokers"); 
+    }
+}
